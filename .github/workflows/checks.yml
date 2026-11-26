@@ -1,0 +1,71 @@
+name: PR checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# If someone pushes again while checks are running, cancel the old run
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: checks          # this name is what the ruleset requires
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v6
+
+      # 1. Stop data, model weights and secrets from being committed
+      - name: Block large, data and secret files
+        run: |
+          bad=0
+          while IFS= read -r f; do
+            case "$f" in
+              *.tif|*.tiff|*.nc|*.zip|*.pth|*.pt|*.ckpt|.env|*/.env)
+                echo "::error file=$f::This file type must not be committed: $f (put data and model weights on the shared Drive)"
+                bad=1 ;;
+            esac
+            if [ -f "$f" ] && [ "$(stat -c%s "$f")" -gt 5242880 ]; then
+              echo "::error file=$f::File is larger than 5 MB: $f (put it on the shared Drive instead)"
+              bad=1
+            fi
+          done < <(git ls-files)
+          exit $bad
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      # 2. Make sure requirements.txt still installs cleanly
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt ruff pytest
+
+      # 3. Catch code that cannot even run: syntax errors and undefined names.
+      #    Style is NOT checked, so this only fails on real bugs.
+      #    Notebooks are skipped (they are for exploration only).
+      - name: Check for broken Python code
+        run: ruff check --select E9,F63,F7,F82 --extend-exclude notebooks --output-format=github .
+
+      # 4. Run tests if there are any (passes when there are none yet)
+      - name: Run tests
+        run: |
+          code=0
+          pytest -q || code=$?
+          if [ "$code" -eq 5 ]; then
+            echo "No tests found yet, skipping."
+            exit 0
+          fi
+          exit $code
