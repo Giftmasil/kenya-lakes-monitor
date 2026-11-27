@@ -11,3 +11,5 @@ Every project decision, with its date and reason. Add new ones at the bottom.
 | 2026-11-26 | Model: U-Net (PyTorch), not TensorFlow Object Detection API | The API in the book is deprecated; bounding boxes give poor area estimates | Group |
 | 2026-11-26 | Dependencies via pip `requirements.txt` (not conda) | Works the same on Windows laptops and Colab | Gift |
 | 2026-11-26 | Repo is public; all changes to `main` go through reviewed PRs | Free-plan branch protection only works on public repos | Gift |
+| 2026-11-26 | Lake outlines = HydroLAKES ∪ WOfS all-time water (≥5%), holes filled, +1 km buffer | HydroLAKES outlines are older than the post-2010 lake rise; WOfS adds the newly flooded area | Gift |
+| 2026-11-26 | Lake `type` values are freshwater / saline / swamp | Turkana is saline-alkaline but not a soda lake, so one "saline" class is more accurate | Gift |
