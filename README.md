@@ -2,7 +2,7 @@
 
 Tracking how Kenya's lakes have shrunk and grown since 1984, using satellite imagery and a water-segmentation model (U-Net).
 
-> **Status:** Week 1. Repo setup and lake outlines done; baseline lake areas and training data next.
+> **Status:** Week 1. Repo, lake outlines, Colab, Drive and Earth Engine are set up; baseline lake areas and training data next.
 
 ## Why this project
 
@@ -66,7 +66,14 @@ pip install -r requirements-ml.txt     # only if you train or run the model
 
 With GitHub Desktop instead: **File → Clone repository → Giftmasil/kenya-lakes-monitor**, then open the folder in VS Code and run the `venv` and `pip` lines in its terminal.
 
-**Google Earth Engine:** run `earthengine authenticate` once, and use the team's shared Cloud project (ask the project lead for the project ID).
+**Accounts:** GitHub uses your personal account. **Colab, Google Drive and Earth Engine all use your UoN student account** (`@students.uonbi.ac.ke`).
+
+**Google Earth Engine:** the team shares one project, **`kenya-lakes-monitor`**. Ask the project lead to add your UoN email, then follow [`docs/setup.md`](docs/setup.md) to test it. On your laptop, run `earthengine authenticate` once and sign in with your UoN account. In code:
+
+```python
+import ee
+ee.Initialize(project="kenya-lakes-monitor")
+```
 
 ---
 
@@ -113,6 +120,14 @@ from src.make_lakes import LAKES                   # the team's own code imports
 from google.colab import drive
 drive.mount("/content/drive")
 DATA = "/content/drive/MyDrive/kenya-lakes"        # the team's shared data folder
+```
+
+And for Earth Engine:
+
+```python
+import ee
+ee.Authenticate()                                  # pick your UoN account in the pop-up
+ee.Initialize(project="kenya-lakes-monitor")
 ```
 
 The first time, Colab asks you to allow access to your Drive. See **Shared Google Drive** below for what's in the folder and how to make it show up.
