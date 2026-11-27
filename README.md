@@ -4,6 +4,10 @@ Tracking how Kenya's lakes have shrunk and grown since 1984, using satellite ima
 
 > **Status:** Week 1. Repo, lake outlines, Colab, Drive and Earth Engine are set up; baseline lake areas and training data next.
 
+**Start here:** open the starter notebook in Colab, run it top to bottom, and see the lakes and satellite images for yourself:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Giftmasil/kenya-lakes-monitor/blob/main/notebooks/01_explore_lakes.ipynb)
+
 ## Why this project
 
 Many of Kenya's Rift Valley lakes (Baringo, Nakuru, Naivasha and others) have risen sharply since 2010, flooding homes, schools and roads. Others, such as Lake Ol' Bolossat, are shrinking. We measure each lake's open-water area over time and rank the lakes by how much they have changed, in either direction.
@@ -38,6 +42,7 @@ kenya-lakes-monitor/
 │   ├── model/        # U-Net training, evaluation, inference
 │   └── analysis/     # validation, ranking, charts
 ├── notebooks/        # exploration only; final code lives in src/
+│   └── 01_explore_lakes.ipynb   # starter notebook: lakes, Earth Engine, first images
 ├── app/              # web map / dashboard
 ├── outputs/          # figures, results (small files only)
 ├── report/           # written report and slides
@@ -134,8 +139,11 @@ The first time, Colab asks you to allow access to your Drive. See **Shared Googl
 
 ### Step 3: Open, edit and save notebooks
 
-- **Open a notebook:** in Colab, go to **File → Open notebook → GitHub**, enter `Giftmasil/kenya-lakes-monitor`, and pick a notebook from `notebooks/`. Or use this URL pattern:
+- **Open the starter notebook in one click:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Giftmasil/kenya-lakes-monitor/blob/main/notebooks/01_explore_lakes.ipynb)
+  (direct link: <https://colab.research.google.com/github/Giftmasil/kenya-lakes-monitor/blob/main/notebooks/01_explore_lakes.ipynb>). It already contains the setup cell, a map of the 9 lakes, the Earth Engine connection, image counts per lake, a cloud-free picture of a lake, and the MNDWI water index. **Use it as the template for your own notebooks.**
+- **Open any other notebook:** in Colab, go to **File → Open notebook → GitHub**, enter `Giftmasil/kenya-lakes-monitor`, pick a branch, and choose a notebook from `notebooks/`. Or swap the file name in the link above, e.g.
   `https://colab.research.google.com/github/Giftmasil/kenya-lakes-monitor/blob/main/notebooks/<name>.ipynb`
+- **Notebooks still on a branch** (not merged yet): replace `main` in the link with the branch name, or pick the branch in the **Branch** dropdown of **File → Open notebook → GitHub**.
 - **Save it back to GitHub.** `main` is protected, so Colab can't save to it directly:
   1. On github.com, use the branch dropdown to create a new branch (e.g. `notebooks/explore-lakes`).
   2. In Colab: **Edit → Clear all outputs** (maps and images can push a notebook over the 5 MB limit in our checks).
@@ -224,7 +232,10 @@ python -m src.baseline.wofs_areas --data-dir data                               
 4. A PR can merge only when:
    - **the automatic checks pass.** They block data files, files over 5 MB, broken Python and failing tests, and check that `requirements.txt` installs.
    - **one teammate has approved it.**
-5. Merge with **Squash and merge**. The branch is deleted automatically.
+5. Merge with **Squash and merge**. The branch is deleted on GitHub automatically.
+6. **Start every new piece of work on a new branch.** After a merge, in GitHub Desktop: **Current branch → main → Fetch origin → Pull origin → New branch**. Don't keep committing on an old branch that's already been merged.
+
+   Why: squash merging puts *one new commit* on `main` instead of your branch's commits. A reused branch still has its old commits, so its next PR shows them all again, sometimes with conflicts. If it's already happened, open the old branch and use **Branch → Update from main** before opening the PR.
 
 Push at least once a week, even if the work is unfinished. New members: start with [`docs/setup.md`](docs/setup.md).
 
@@ -235,6 +246,7 @@ _Filled in as each stage is built._
 | Stage | Command | Owner | Status |
 |---|---|---|---|
 | Lake outlines | `python -m src.make_lakes --hydrolakes <path to HydroLAKES_polys_v10.shp>` | Gift | ✅ Done (output already committed; only rerun if the lake list changes) |
+| Explore lakes & imagery | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Giftmasil/kenya-lakes-monitor/blob/main/notebooks/01_explore_lakes.ipynb) (`notebooks/01_explore_lakes.ipynb`) | Gift | ✅ Done |
 | Baseline lake areas | `python -m src.baseline.wofs_areas` | Aneselmus | Not started |
 | Training dataset | `python -m src.dataset.build` | Melissa | Not started |
 | Model training | `python -m src.model.train` | Violet | Not started |
