@@ -134,6 +134,14 @@ def wofs_max_extent(lon, lat, seed_geom_wgs84, bbox):
 
 
 def main(hydrolakes_path: str, out_path: str):
+    if not Path(hydrolakes_path).exists():
+        raise SystemExit(
+            f"HydroLAKES file not found: {hydrolakes_path}\n"
+            "Download the 'Lake polygons' shapefile (~820 MB) from "
+            "https://www.hydrosheds.org/products/hydrolakes, unzip it, and pass the full "
+            "path to HydroLAKES_polys_v10.shp. You only need this to REBUILD the lake "
+            "outlines; data/lakes/lakes.geojson is already in the repo."
+        )
     print("Reading HydroLAKES (Kenya only)...")
     hl = gpd.read_file(hydrolakes_path, bbox=KENYA_BBOX).to_crs(WGS84)
 
